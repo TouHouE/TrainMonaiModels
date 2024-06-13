@@ -29,7 +29,7 @@ def change2monai_ds(image_label_pair_totalsegmentator_style: dict, root: str, fo
     return (train_ds, val_ds, test_ds)
 
 
-def get_aug(phase, custom_layer=None):
+def get_aug(phase='train', custom_layer=None):
     comp = [
         MF.LoadImaged(keys=['image', 'label']),
         MF.EnsureChannelFirstd(keys=['image', 'label']),
@@ -38,7 +38,7 @@ def get_aug(phase, custom_layer=None):
     ]
 
     comp.extend([
-        MF.ScaleIntensityd(keys=['image'], a_min=-1024, a_max=1024, b_min=-1, b_max=1, clip=True)
+        MF.ScaleIntensityRanged(keys=['image'], a_min=-1024, a_max=1024, b_min=-1, b_max=1, clip=True)
     ])
     return MF.Compose(comp)
 

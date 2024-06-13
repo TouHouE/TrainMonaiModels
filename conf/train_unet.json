@@ -11,8 +11,9 @@
     }
   },
   "data": {
-    "image_root": "",
-    "json_path": ""
+    "image_root": "/mnt/src/data",
+    "json_path": "/mnt/src/data/vista_table.json",
+    "fold": 0
   },
   "loader": {
     "train": {
@@ -36,12 +37,14 @@
   },
   "optim": {
     "name": "adamw",
-    "lr": 1e-4
+    "param": {
+	    "lr": 1e-4
+    }
   },
   "logs": {
     "logger": ["wandb", "tqdm"],
     "name": "sup-unet-3d",
-    "exp_root": "",
+    "exp_root": "/mnt/workspace/project/TrainMonaiModels/ckpt",
     "project": "Sup-3dUNet"
   }
 

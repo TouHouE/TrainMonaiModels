@@ -5,12 +5,17 @@ import json
 import datetime as dt
 
 
+def dt2str(time_):
+    return f'{time_:%Y-%m-%d_%H-%M-%S}'
+
+
+
 def main(args):
     with open(args.conf, 'r') as jin:
         config = json.load(jin)
     config['time'] = dt.datetime.now()
     # the model weight should save at this place.
-    config['logs']['exp_dir'] = os.path.join(config['logs']['exp_root'], config['time'])
+    config['logs']['exp_dir'] = os.path.join(config['logs']['exp_root'], dt2str(config['time']))
     engine.start_training(config)
     pass
 

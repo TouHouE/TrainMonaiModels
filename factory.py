@@ -44,7 +44,7 @@ def get_loader(config) -> Dict[str, DataLoader]:
     trans = get_aug()
 
     for key, _ds in all_ds.items():
-        ds = CacheDataset(ds, transform=trans, cache_rate=1)
+        ds = CacheDataset(_ds, transform=trans, cache_rate=1)
         loader_map[key] = DataLoader(ds, **lcfg[key])
     return loader_map
 
