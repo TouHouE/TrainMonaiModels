@@ -97,6 +97,12 @@ def train_epoch(model: nn.Module, loader, optimizer:optim.Optimizer, loss_func: 
                 'epoch loss': epoch_loss / (idx + 1)
             })
 
+        if wandb_logger is not None and accelerator.is_main_process:
+            wandb_logger.log({
+                'step train loss': iter_loss,
+                'avg train loss': epoch_loss / (idx + 1)
+            })
+
     optimizer.zero_grad()
     return epoch_loss
 
