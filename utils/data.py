@@ -17,7 +17,7 @@ def change2monai_ds(image_label_pair_totalsegmentator_style: dict, root: str, fo
                 'label': os.path.join(root, pack['label'])
             })
         else:
-            train_ds.apend({
+            train_ds.append({
                 'image': os.path.join(root, pack['image']),
                 'label': os.path.join(root, pack['label'])
             })
