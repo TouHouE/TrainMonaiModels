@@ -5,7 +5,7 @@ from monai import transforms as MF
 
 def change2monai_ds(image_label_pair_totalsegmentator_style: dict, root: str, fold: int, return_dict: bool=True):
     ts_style_ds = image_label_pair_totalsegmentator_style.copy()
-    train_ds, val_ds, test_ds = dict(image=[], label=[]), dict(image=[], label=[]), dict(image=[], label=[])
+    train_ds, val_ds, test_ds = [], [], []
 
     train_pack = ts_style_ds['training']
     test_pack = ts_style_ds['testing']
