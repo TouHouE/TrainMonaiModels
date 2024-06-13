@@ -67,7 +67,10 @@ def train_epoch(model: nn.Module, loader, optimizer:optim.Optimizer, loss_func: 
     epoch_loss = .0
     model.train()
 
-    for idx, (image, label) in bar:
+    for idx, pack in bar:
+        image = pack['image']
+        label = pack['label']
+
         optimizer.zero_grad(set_to_none=True)
 
         with torch.autocast(device_type='cuda', dtype=torch.bfloat16):
@@ -98,8 +101,10 @@ def do_val(model: nn.Module, loader, loss_func, epoch: int, config):
         bar = tqdm(bar, total=len(loader), desc='validation')
     val_loss = .0
 
-    for idx, (image, label) in bar:
-        image, label = image.cuda(), label.cuda()
+    for idx, pack in bar:
+        image = pack['image']
+        label = pack['label']
+
         pred = model(image)
         iter_loss = loss_func(pred, label)
         val_loss += iter_loss.item()
