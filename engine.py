@@ -63,7 +63,7 @@ def train_epoch(model: nn.Module, loader, optimizer:optim.Optimizer, loss_func: 
     lcfg: dict = config['logs']
     bar: enumerate | tqdm = enumerate(loader)
     if 'tqdm' in lcfg['logger']:
-        bar = tqdm(bar, total=len(loader), desc=f'Epoch:[{epoch}/{config["max_epoch"]}]|')
+        bar = tqdm(bar, total=len(loader), desc=f'Epoch:[{epoch}/{config["epoch"]}]|')
     epoch_loss = .0
     model.train()
 
