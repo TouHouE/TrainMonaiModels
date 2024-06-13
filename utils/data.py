@@ -12,14 +12,14 @@ def change2monai_ds(image_label_pair_totalsegmentator_style: dict, root: str, fo
 
     for pack in train_pack:
         if pack['fold'] == fold:
-            val_ds['image'] = os.path.join(root, pack['image'])
-            val_ds['label'] = os.path.join(root, pack['label'])
+            val_ds['image'].append(os.path.join(root, pack['image']))
+            val_ds['label'].append(os.path.join(root, pack['label']))
         else:
-            train_ds['image'] = os.path.join(root, pack['image'])
-            train_ds['label'] = os.path.join(root, pack['label'])
+            train_ds['image'].append(os.path.join(root, pack['image']))
+            train_ds['label'].append(os.path.join(root, pack['label']))
     for pack in test_pack:
-        test_ds['image'] = os.path.join(root, pack['image'])
-        test_ds['label'] = os.path.join(root, pack['label'])
+        test_ds['image'].append(os.path.join(root, pack['image']))
+        test_ds['label'].append(os.path.join(root, pack['label']))
     if return_dict:
         return {
             "train": train_ds.copy(),
