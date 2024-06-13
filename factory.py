@@ -44,7 +44,7 @@ def get_loader(config) -> Dict[str, DataLoader]:
     trans = get_aug()
 
     for key, _ds in all_ds.items():
-        ds = PersistentDataset(_ds, cache_dir=f'/workspace/{key}_cache')
+        ds = PersistentDataset(_ds, transform=trans, cache_dir=f'/workspace/{key}_cache')
         # ds = CacheDataset(_ds, transform=trans, cache_rate=1)
         print(f'# of sample in {key}: {len(ds)}')
         loader_map[key] = DataLoader(ds, **lcfg[key])
