@@ -13,7 +13,7 @@
   "data": {
     "image_root": "/mnt/src/data",
     "json_path": "/mnt/src/data/vista_table.json",
-    "fold": 0
+    "fold": 1
   },
   "loader": {
     "train": {
