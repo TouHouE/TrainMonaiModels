@@ -80,7 +80,6 @@ def train_epoch(model: nn.Module, loader, optimizer:optim.Optimizer, loss_func: 
 
         optimizer.zero_grad(set_to_none=True)
 
-        with torch.autocast(device_type='cuda', dtype=torch.bfloat16):
         with accelerator.autocast():
             pred = model(image)
             loss = loss_func(pred, label)
