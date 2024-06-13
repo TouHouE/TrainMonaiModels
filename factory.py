@@ -3,7 +3,7 @@ import json
 from torch import nn
 from torch import optim
 
-from monai.data import DataLoader, CacheDataset
+from monai.data import DataLoader, CacheDataset, PersistentDataset
 from monai.networks.nets import UNet
 
 from utils.data import change2monai_ds, get_aug
@@ -44,7 +44,8 @@ def get_loader(config) -> Dict[str, DataLoader]:
     trans = get_aug()
 
     for key, _ds in all_ds.items():
-        ds = CacheDataset(_ds, transform=trans, cache_rate=1)
+        ds = PersistentDataset(_ds, cache_dir=f'/workspace/{key}_cache')
+        # ds = CacheDataset(_ds, transform=trans, cache_rate=1)
         print(f'# of sample in {key}: {len(ds)}')
         loader_map[key] = DataLoader(ds, **lcfg[key])
     return loader_map
