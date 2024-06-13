@@ -7,6 +7,8 @@ import factory
 from monai.losses import DiceCELoss
 import os
 import datetime as dt
+import accelerate as ACC
+accelerator: ACC.Accelerator
 # import wandb
 
 
@@ -16,13 +18,18 @@ def get_now(t0):
 
 
 def start_training(config):
+    global accelerator
+    accelerator = ACC.Accelerator(mixed_precision='bf16')
     model: nn.Module = factory.get_model(config)
     optimizer: optim.Optimizer = factory.get_optimizer(model, config)
     loss_func = DiceCELoss(sigmoid=True)
     loader_map = factory.get_loader(config)
+    model, optimizer = accelerator.prepare(model, optimizer)
+    for key, value in loader_map.items():
+        loader_map[key] = accelerator.prepare(value)
     tot_epoch = config['epoch']
+    config['rank'] = 1 - int(accelerator.is_main_process)
     is_rank0 = getattr(config, 'rank', 0) == 0
-
 
     run = None
     if 'wandb' in config['logs']['logger'] and is_rank0:
@@ -55,7 +62,7 @@ def start_training(config):
 
 
         if best_vdloss > vdloss and is_rank0:
-            torch.save(model.float().state_dict(), os.path.join(config['logs']['exp_dir'], 'best-model.pt'))
+            torch.save(accelerator.unwrap_model(model).state_dict(), os.path.join(config['logs']['exp_dir'], 'best-model.pt'))
             best_vdloss = vdloss
 
 
@@ -74,10 +81,11 @@ def train_epoch(model: nn.Module, loader, optimizer:optim.Optimizer, loss_func: 
         optimizer.zero_grad(set_to_none=True)
 
         with torch.autocast(device_type='cuda', dtype=torch.bfloat16):
+        with accelerator.autocast():
             pred = model(image)
             loss = loss_func(pred, label)
-
-        loss.backward()
+        accelerator.backward(loss)
+        # loss.backward()
         optimizer.step()
 
         iter_loss = loss.item()

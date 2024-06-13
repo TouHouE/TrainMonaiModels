@@ -9,7 +9,6 @@ def dt2str(time_):
     return f'{time_:%Y-%m-%d_%H-%M-%S}'
 
 
-
 def main(args):
     with open(args.conf, 'r') as jin:
         config = json.load(jin)
